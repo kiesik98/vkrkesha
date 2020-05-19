@@ -1,0 +1,71 @@
+{% load static extra %}
+<html>
+<head>
+    <title>Testing System | {% block header %}Пустой заголовок{% endblock %}</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
+          integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+    <link href='//fonts.googleapis.com/css?family=Lobster&subset=latin,latin-ext' rel='stylesheet' type='text/css'>
+    {% block extra_styles %}
+    {% endblock %}
+</head>
+<body>
+
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <div class="collapse navbar-collapse">
+        <ul class="navbar-nav mr-auto">
+            {% block page-header %}
+                {% if not student_test %}
+                {% if request.user.is_authenticated %}
+                <li class="nav-item{% if request.resolver_match.url_name == 'home' %} active{% endif %}">
+                    <a class="nav-link" href="{% url 'app:home' %}">Система тестирования</a>
+                </li>
+                <li class="nav-item{% if request.resolver_match.url_name == 'logout' %} active{% endif %}">
+                    <a class="nav-link" href="{% url 'app:logout' %}">Выход</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'admin:index' %}">Администрирование</a>
+                </li>
+                {% else %}
+                    <li class="nav-item{% if request.resolver_match.url_name == 'login' %} active{% endif %}">
+                        <a class="nav-link" href="{% url 'app:login' %}">Вход</a>
+                    </li>
+                    <li class="nav-item{% if request.resolver_match.url_name == 'signup' %} active{% endif %}">
+                        <a class="nav-link" href="{% url 'app:signup' %}">Регистрация</a>
+                    </li>
+                {% endif %}
+                {% endif %}
+            {% endblock %}
+        </ul>
+    </div>
+</nav>
+<div class="content container">
+    {% with INFO=20 ERROR=40 %}
+        <div class="col-md-10">
+            {% block messages %}
+                {% if messages %}
+                    <br>
+                    {% for message in messages %}
+                        <div class="alert
+                                {% if message.level == INFO %}
+                                alert-info
+                                {% elif message.level == ERROR %}
+                                alert-danger
+                                {% else %}
+                                alert-light
+                                {% endif %}" role="alert">
+                            {{ message }}
+                        </div>
+                    {% endfor %}
+                {% endif %}
+            {% endblock %}
+        </div>
+        {% block content %}
+            Пустой content блок
+        {% endblock %}
+    {% endwith %}
+</div>
+</body>
+{% block after_body %}
+    <script src="https://code.jquery.com/jquery-3.1.0.min.js"></script>
+{% endblock %}
+</html>

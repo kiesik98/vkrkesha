@@ -1,0 +1,22 @@
+<table class="table">
+    <tr>
+        <td>Вопросы без ответов</td>
+        {% for i,empty in is_empty_table.items %}
+            <td style="text-align: center;{% if test_question.test_question.number == i and empty %}border: 1px solid #007bff{% endif %}">
+                {% if empty %}
+                    <a href="{% url 'app:test' student_test.id i %}" style="text-decoration: none">{{ i }}</a>
+                {% endif %}
+            </td>
+        {% endfor %}
+    </tr>
+    <tr>
+        <td>Вопросы с ответами</td>
+        {% for i,empty in is_empty_table.items %}
+            <td style="text-align: center;{% if test_question.test_question.number == i and not empty %}border: 1px solid #007bff{% endif %}">
+                {% if not empty %}
+                    <a href="{% url 'app:test' student_test.id i %}" style="text-decoration: none">{{ i }}</a>
+                {% endif %}
+            </td>
+        {% endfor %}
+    </tr>
+</table>

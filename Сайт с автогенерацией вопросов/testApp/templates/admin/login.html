@@ -1,0 +1,8 @@
+{% extends 'admin/login.html' %}
+
+{% block content %}
+    <p><a href="{% url 'app:home' %}">Перейти на главную страницу</a></p>
+    {{ block.super }}
+{% endblock %}
+
+

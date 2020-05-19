@@ -1,0 +1,10 @@
+{% extends 'admin/change_form.html' %}
+
+{% block submit_buttons_bottom %}
+    <div class="submit-row">
+        <p style="text-align: center;">
+            <input type="submit" value="Пересчитать баллы и пометить проверенным" name="_calc" class="default">
+        </p>
+    </div>
+    {{ block.super }}
+{% endblock %}

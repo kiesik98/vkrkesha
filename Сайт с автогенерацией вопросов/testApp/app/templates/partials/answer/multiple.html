@@ -1,0 +1,7 @@
+<input type="checkbox" name="answers" id="id_answer_{{ forloop.counter }}" value="{{ answer.id }}"
+       class="form-check-input" {% if answer in student_answers %}checked{% endif %}>
+<label for="id_answer_{{ forloop.counter }}" class="form-check-label">{{ answer.text }}</label>
+<br>
+{% if answer.image.url != "" %}
+    <p><img src="{{answer.image.url}}"></p>
+{% endif %}

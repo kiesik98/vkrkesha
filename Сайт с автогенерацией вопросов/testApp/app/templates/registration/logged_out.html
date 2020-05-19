@@ -1,0 +1,7 @@
+{% extends 'registration/logged_out.html' %}
+
+{% block content %}
+    {{ block.super }}
+    <p><a href="{% url 'app:Home' %}">Перейти на главную страницу</a></p>
+{% endblock %}
+

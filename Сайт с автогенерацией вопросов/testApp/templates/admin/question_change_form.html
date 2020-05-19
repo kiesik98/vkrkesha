@@ -1,0 +1,123 @@
+{% extends 'admin/change_form.html' %}
+
+{% block submit_buttons_bottom %}
+    <div class="submit-row">
+        <p style="text-align: center;">
+            <input type="submit" value="Сгенерировать вопрос" name="_calc" class="default" id="load">
+        </p>
+    </div>
+    {{ block.super }}
+  <div id="my_modal" class="modal" style="background-color: white; opacity:1">
+    <div class="modal_content">
+      <span class="close_modal_window">×</span>
+      <p align="center">Сгенерировать вопрос</p>
+        <select name="type" style="margin-left: 10%">
+            <option value="1">Тип 1</option>
+            <option value="2">Тип 2</option>
+            <option value="4">Тип 4</option>
+            <option value="5">Остаток 1</option>
+        </select>
+        <input type="button" name="gen" style="margin-left: 10%" value="Сгенерировать">
+    </div>
+  </div>
+
+
+<script type="text/javascript">
+
+var modal = document.getElementById("my_modal");
+var btn = document.getElementById("load");
+var span = document.getElementsByClassName("close_modal_window")[0];
+var gen = document.getElementsByName("gen")[0];
+var message = document.getElementById("message");
+
+//Скрытие модального окна
+modal.style.display = "none";
+
+gen.onclick = function () {
+  var csrfcookie = function () {
+    var cookieValue = null,
+      name = "csrftoken";
+    if (document.cookie && document.cookie !== "") {
+      var cookies = document.cookie.split(";");
+      for (var i = 0; i < cookies.length; i++) {
+        var cookie = cookies[i].trim();
+        if (cookie.substring(0, name.length + 1) == name + "=") {
+          cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+          break;
+        }
+      }
+    }
+    return cookieValue;
+  };
+
+  //	Данные для передачи на сервер например	id товаров и его количество
+  let taskType = document.getElementsByName("type")[0].value;
+  let TopicValue = !!document.getElementsByName("name")[0] ? document.getElementsByName('name')[0].value : document.getElementsByName("topic")[0].value
+
+  // Проверка наличия выбранной темы. В случае отсуствия возаращаем ошибку
+  if (!!!TopicValue) {
+    alert("Не выбрана тема");
+    span.onclick()
+    return false;
+  }
+  var container = document.getElementById("container")
+
+  // принцип	тот же самый что и у обычного POST	запроса
+  const request = new XMLHttpRequest();
+  const url = "http://127.0.0.1:8000/generate";
+  const params = "taskType=" + taskType + "&topicValue=" + TopicValue;
+
+  //	Здесь нужно указать в каком формате мы будем принимать данные вот и все	отличие
+  request.responseType = "json";
+  request.open("POST", url, true);
+  request.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+  request.setRequestHeader("X-CSRFToken", csrfcookie());
+
+  request.addEventListener("readystatechange", () => {
+    if (request.readyState === 4 && request.status === 200) {
+      let obj = request.response;
+
+      // Здесь мы можем обращаться к свойству объекта и получать его значение
+      if (obj.status == 200) {
+        window.location.reload()
+      }
+    }
+  });
+
+  request.send(params);
+  return false;
+};
+
+btn.onclick = function () {
+  modal.style.display = "block";
+  modal.style.align = "center";
+  modal.style.position = "absolute";
+  modal.style.top = "50%";
+  modal.style.left = "50%";
+  modal.style.width = "300px";
+  modal.style.height = "100px";
+  modal.style.zIndex = 10000;
+  modal.style.opacity = 1;
+  modal.style.border = '1px solid black';
+
+  modal.parentElement.style.Index = 1;
+  modal.parentElement.style.opacity = 1;
+
+  return false;
+};
+
+span.onclick = function () {
+  modal.style.display = "none";
+  container.style.opacity = 1;
+};
+
+window.onclick = function (event) {
+  if (event.target == modal) {
+    modal.style.display = "none";
+    container.style.opacity = 1;
+  }
+};
+
+</script>
+{% endblock %}
+

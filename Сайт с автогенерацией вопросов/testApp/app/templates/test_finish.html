@@ -1,0 +1,27 @@
+{% extends 'base_for_site.html' %}
+
+{% block header %}Тестирование{% endblock %}
+{% block content %}
+    <div class="row">
+        {% include 'partials/questions_nav_table.html' %}
+    </div>
+    <div class="col-md-10">
+        <form method="post">
+            {% csrf_token %}
+            <div class="form-group">
+                <h4 style="padding-left: 0; margin-left: 0">Вы уверены, что хотите завершить тест?</h4>
+                <div class="row">
+                    <div class="btn-group" role="group">
+                        <button type="submit" class="btn btn-primary">Завершить тест</button>
+                    </div>
+                    {% include 'partials/timer.html' %}
+                </div>
+            </div>
+        </form>
+    </div>
+{% endblock %}
+
+{% block after_body %}
+    {{ block.super }}
+    {% include 'partials/timer_script.html' %}
+{% endblock %}
